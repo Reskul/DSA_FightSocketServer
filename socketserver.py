@@ -1,5 +1,6 @@
 import socket
 import threading
+from lobby_server import LobbyServer
 
 
 class WelcomeServer:
@@ -14,8 +15,8 @@ class WelcomeServer:
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.bind(self.ADDR)
         print(f"[STARTING] My Address is: {self.SERVER}")
-        self.listen()
         self.client_handler = ClientHandler()
+        self.listen()
 
     def handle_client(self, conn, addr):
         print(f"[NEW CONNECTION] {addr} connected.")
@@ -42,6 +43,16 @@ class WelcomeServer:
             print(f"[ACTIVE CONNECTIONS] {threading.activeCount() - 1}")
 
 
+class LobbyHandler:
+    def __init__(self):
+        self.lobbies = []
+        self.next_id = 1
+
+    def register_new(self, conn, addr):
+        self.lobbies.append(Client(conn, addr, self.next_id))
+        self.next_id = self.next_id + 1  # well.. this might work but could be better
+
+
 class ClientHandler:
     def __init__(self):
         self.clients = []
@@ -65,7 +76,8 @@ class Client:
         else:
             return f"ID:{self.c_id}|ADDR:{self.addr}|LOBBY_ID:{self.lobby}"
 
-    def join_lobby(self, lobby_id):
+    def join_lobby(self, conn, lobby_id):
+        self.conn = conn
         self.lobby = lobby_id
 
 
