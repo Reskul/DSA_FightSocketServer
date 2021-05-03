@@ -1,6 +1,6 @@
 import socket
 import threading
-from lobby_server import LobbyServer
+from net.client import Client
 
 
 class WelcomeServer:
@@ -61,24 +61,6 @@ class ClientHandler:
     def register_new(self, conn, addr):
         self.clients.append(Client(conn, addr, self.next_id))
         self.next_id = self.next_id + 1  # well.. this might work but could be better
-
-
-class Client:
-    def __init__(self, conn, addr, c_id):
-        self.conn = conn
-        self.addr = addr
-        self.c_id = c_id
-        self.lobby = None
-
-    def __repr__(self):
-        if self.lobby is None:
-            return f"ID:{self.c_id}|ADDR:{self.addr}"
-        else:
-            return f"ID:{self.c_id}|ADDR:{self.addr}|LOBBY_ID:{self.lobby}"
-
-    def join_lobby(self, conn, lobby_id):
-        self.conn = conn
-        self.lobby = lobby_id
 
 
 if __name__ == '__main__':
