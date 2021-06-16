@@ -18,3 +18,7 @@ if result == ACK_DISCONNECT:
     input("Disconnected...")
 else:
     input("Something went wrong.")
+
+
+if __name__ == '__main__':
+    hello = 1
